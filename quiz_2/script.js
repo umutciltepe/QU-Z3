@@ -1,0 +1,85 @@
+const icerikler = [
+    { id: 1, value: 'FENERBAHÇE' },
+    { id: 2, value: 'BEŞİKTAŞ' },
+    { id: 3, value: 'TRABZONSPOR' },
+    { id: 4, value: 'GALATASARAY' },
+]
+
+const kapsayici=document.getElementById("container");
+const btnBasla=document.getElementById("startButton");
+let sayac=0;
+let kart1 = null;
+let kart2 = null;
+
+//Başlangıç butonunun tıklanma olayına ilgili fonksiyon atandı.
+btnBasla.addEventListener("click",kartOlustur);
+
+//Başlangıçta dizideki her bir eleman için birer kart oluşturuldu. Karışık gelmesi için ilgili fn çağdıldı.
+function kartOlustur(){
+    sayac=0;
+    kapsayici.innerHTML="";
+    karistir(icerikler);
+    icerikler.forEach(icerik=>{
+        kart=document.createElement("div");
+        kart.innerHTML="?";
+        kart.className="card";
+        kart.dataset.value=icerik.value;
+        kapsayici.appendChild(kart);
+        kart.addEventListener("click",kartAc);
+    })
+}
+//Dizideki nesnelerin karıştırılması için seçilen sıradaki içerik rastgele sıradakiyle yer değiştirdi.
+function karistir(icerikler){
+    for(let i=0;i<icerikler.length;i++){
+        const rastgeleSayi = Math.floor(Math.random() * (i + 1));
+        //console.log(icerikler[i],icerikler[rastgeleSayi]);
+        [icerikler[i], icerikler[rastgeleSayi]] = [icerikler[rastgeleSayi], icerikler[i]];
+    }
+}
+
+//Tıklanan karta ait içerik bilgisi diziden alınarak gösterildi.
+function kartAc(){
+    
+    sayac++;
+    
+    
+    console.log(sayac);
+    if(sayac==1){
+        
+        kart1=this;
+        kart1.innerHTML=this.dataset.value;
+        return kart1;
+          
+    }
+    else if(sayac==2){
+        kart2=this;   
+        kart2.innerHTML=this.dataset.value;
+        kartKarsilastir(kart1,kart2);
+        
+    }
+    
+    console.log(kart1,kart2);
+    
+    
+}
+
+
+
+// Oluşturulan sayaç ile iki kart açılınca eşleşmeyi kontrol edecek fonksiyon tanımlandı.
+function kartKarsilastir(kart1,kart2){
+    
+    if(kart1.textContent===kart2.textContent){
+        kart1.classList.add("eslesenler");
+        kart2.classList.add("eslesenler");
+    }
+    else{
+        setTimeout(() => {
+            kart1.textContent="?";
+            kart2.textContent="?";
+        }, 500);
+
+
+        
+    }
+    sayac=0;
+}
